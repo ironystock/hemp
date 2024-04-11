@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 mb_internal_encoding( "UTF-8" );
 
 class HEMP 
@@ -27,12 +28,13 @@ class HEMP_System
     private array   $headers = [];
     private bool    $is_htmx = false;
     
+    private ?array  $request;
     private ?string $verb;
     private ?string $resource;
     private ?array  $parameters;
     private ?array  $objects;
 
-    public function __construct( private bool $is_routed, private ?string $config_location  )
+    public function __construct( private bool $is_routed, private ?string $config_location )
     {
         
         //Check for and parse in config
@@ -48,7 +50,7 @@ class HEMP_System
         // Collect, sanitize and store HX- headers
         foreach( getallheaders() as $k => $v )
         {
-            $key = self::wash( $k );
+            $key = self::wash( content: $k );
             $key_name = substr( $k, 3 );
             if ( strncmp( $key, "HX-", 3 ) === 0 && strlen( $key_name ) > 0 )
             {
@@ -63,14 +65,23 @@ class HEMP_System
         {
             $this->is_htmx = true;
         }
-        $this->verb = self::wash( $_SERVER["REQUEST_METHOD"] );
-        $uri = $_SERVER["REQUEST_URI"];
-        
-        // $_SERVER["REQUEST_URI"]
-        // file?
+        $this->verb = self::wash( content: $_SERVER["REQUEST_METHOD"] );
+        $this->request = parse_url( 
+            ( isset( $_SERVER["HTTPS"] ) || ( isset( $_SERVER["REQUEST_SCHEME"]) && $_SERVER["REQUEST_SCHEME"] == "https" )) ? "https" : "http" .
+            "://" .
+            $_SERVER["SERVER_ADDR"] .
+            $_SERVER["REQUEST_URI"]
+        );
+        $this->resource = substr( $this->request["path"], strlen( $this->getConfig( section: "system", key: "path_prefix" )));
+        //$this->parameters = substr( $request["path"], strlen( $this->getConfig( section: "system", key: "path_prefix" )));
 
+        if ( in_array( $this->request, [ "GET", "POST" ] ))
+        {
+            //Normal workflow
+        }
+        else {
 
-
+        }
     }
 
     public static function wash( string $content ): string
@@ -102,9 +113,17 @@ class HEMP_System
             {
                 return $this->config[$section][$key];
             }
+            elseif ( $key )
+            {
+                return null;
+            }
             else {
                 return $this->config[$section];
             }
+        }
+        elseif ( $section )
+        {
+            return null;
         }
         else
         {
