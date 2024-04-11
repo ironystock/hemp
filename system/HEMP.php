@@ -94,19 +94,21 @@ class HEMP_System
     {
         return $this->headers["Target-Name"] ;
     }
-    public function getConfigs(): ?array
+    public function getConfig( ?string $section, ?string $key ): ?array
     {
-        return $this->config;
-    }
-    public function getConfig( ?string $section ): ?array
-    {
-        if ( isset( $this->config[$section] ) && is_array( $this->config[$section] ))
+        if ( $section && isset( $this->config[$section] ) && is_array( $this->config[$section] ))
         {
-            return $this->config[$section];
+            if ( $key && isset( $this->config[$section][$key] ))
+            {
+                return $this->config[$section][$key];
+            }
+            else {
+                return $this->config[$section];
+            }
         }
         else
         {
-            return null;
+            return $this->config;
         }
     }
     
