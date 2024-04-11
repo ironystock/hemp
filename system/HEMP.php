@@ -94,7 +94,7 @@ class HEMP_System
     {
         return $this->headers["Target-Name"] ;
     }
-    public function getConfig( ?string $section, ?string $key ): ?array
+    public function getConfig( ?string $section, ?string $key ): array|string|null
     {
         if ( $section && isset( $this->config[$section] ) && is_array( $this->config[$section] ))
         {
