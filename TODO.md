@@ -1,0 +1,44 @@
+HEMP Roadmap
+===
+
+- hemp core (_v 0.5.0_) **Q3 2024**
+	- telemetry
+		- htmx-ended
+		- hemp-ended
+		- bridge
+	- router
+		- method sig
+	- terminal
+	- interfaces
+		- Strand
+		- Rope
+		- Knot
+		- Utility
+		- Library
+	- autoloader
+	- config
+	- scaffold (_hemp-ladder_)
+		- boilerplate (_hemp-crochet_)
+	- documentation
+		- install
+		- reference
+		- setup
+		- examples
+	- auth
+	- setup
+	- datalayer
+		- mysql/mariadb
+		- sqlite
+	- logging
+		- hemp-logview
+		- terminal-enabler
+	- power, launch hemp.dev
+	- websocket (?)
+	- sse (?)
+
+- hemp rope (_v 1.0.0_) **Q1 2025 (_Stable PHP 8.4 Dependency_)**
+	- hemp-hyperconfig
+	- hemp-htmreflex
+	- hemp-hypertmpl
+	- hemp-async
+	- editor support
